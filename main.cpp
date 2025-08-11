@@ -1,61 +1,50 @@
 #include <iostream>
-#include <string>
+#include <vector>
 #include <algorithm>
-
 
 using namespace std;
 
-
-bool is_palindrome(const string& s, int start, int end) {
-    while (start < end) {
-        if (s[start] != s[end]) {
-            return false;
-        }
-        start++;
-        end--;
-    }
-    return true;
-}
-
-
-void to_lowercase(string& s) {
-    for (char& c : s) {
-        c = tolower(c);
-    }
-}
-string remove_spaces(string& s) {
-    s.erase(remove(s.begin(), s.end(), ' '), s.end());
-    return s;
-}
-
 int main() {
-    string s;
-    getline(cin, s);
-
-    to_lowercase(s);
-    remove_spaces(s);
-    int n = s.length();
-    //cout<<s<<endl;
-    bool found_palindrome = false;
+    int N; 
+    cin >> N;
 
 
-    for (int length = 2; length <= n; length++) {
-        for (int i = 0; i <= n - length; i++) {
-            if (is_palindrome(s, i, i + length - 1)) {
-                found_palindrome = true;
-                break;
+    int B, S;
+    cin >> B >> S;
+
+
+    vector<int> bags(N, 0);
+    bags[0] = B;
+    bags[1] = S;
+
+
+    int total_candy = B + S;
+
+
+    int avg = total_candy / N;
+
+
+    int extra = total_candy % N;
+
+
+    sort(bags.begin(), bags.end(), greater<int>());
+
+
+    int moves = 0;
+    for (int i = 0; i < N; i++) {
+        if (i < extra) {
+
+            if (bags[i] > avg + 1) {
+                moves += bags[i] - (avg + 1);
+            }
+        } else {
+            if (bags[i] > avg) {
+                moves += bags[i] - avg;
             }
         }
-        if (found_palindrome) {
-            break;
-        }
     }
 
-    if (found_palindrome) {
-        cout << "Palindrome"<<endl;
-    } else {
-        cout << "Anti-palindrome"<<endl;
-    }
+    cout << moves;
 
     return 0;
 }
